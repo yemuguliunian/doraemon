@@ -1,0 +1,20 @@
+# dependencies
+node_modules
+
+dist
+docs-dist
+lib
+es
+
+# misc
+npm-debug.log*
+
+*.lock
+pnpm-lock.yaml
+
+#cache
+.cache
+.docz
+.umi
+
+.DS_Store    

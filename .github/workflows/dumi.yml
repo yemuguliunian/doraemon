@@ -1,0 +1,40 @@
+# 工作流名称
+name: site deploy
+
+# 触发 workflow 的名称
+on:
+  push:
+    # main 分支推送触发 workflow
+    branches:
+      - main
+
+# 工作流下的一个或多个作业任务
+jobs:
+  # 作业名称 - 部署
+  deploy:
+    # 指定 job 任务运行所需要的虚拟机环境，默认填写 ubuntu-latest 即可
+    runs-on: ubuntu-latest
+    # job 作业执行的运行步骤，可以包含一个或多个步骤
+    steps:
+      # 检出源码
+      - name: Checkout
+        # 使用 actions/checkout@v3
+        uses: actions/checkout@v3
+      # 安装 node@14
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'   
+      # 编译
+      - name: Build
+        # docs:build 对应文档的打包脚本
+        run: |
+          yarn install
+          yarn docs:build
+      # 部署到 github pages
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # 推送的文件，既文档站点打包后的产物目录
+          publish_dir: ./dist
